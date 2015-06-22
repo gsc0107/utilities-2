@@ -1,4 +1,5 @@
 #!/bin/bash
+rm -r Particle*particle*
 
 source figure_parameters.src
 
