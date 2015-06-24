@@ -358,7 +358,7 @@ def interpret_smcsmc( top_param = program_parameters(), scaling_method = "2N0", 
     
     #dir_name = "smcsmc/"+case + "Samples" +`nsample`
     dir_name = "smcsmc" + case + "Samples" +`nsample`
-    ms_param = param.ms_param_of_case(case)
+    ms_param = param.ms_param_of_case(case, nsample)
     if len(ms_param.Time) == 1: return
     
     ms_param.plot(ylog10scale = ylog10scale, timescale = scaling_method, year = year)
@@ -576,7 +576,7 @@ def run_smcsmc ( top_param, smcsmc = "smcsmc" ):
     os.system("rm -r " + dir_name)
     os.system("mkdir " + dir_name)
     
-    ms_param = param.ms_param_of_case(case)
+    ms_param = param.ms_param_of_case(case, nsample)
     ms_param.fixed_seed = top_param.fixed_seed
     
     for ith_repeat in range(replicates):
