@@ -165,10 +165,10 @@ def smcsmc_figure(cum_change, tmrca, position, prefix):
     pl.axis([min(site), max(site) , shifting, max(time)])  # for the case of split
     #my_axes.set_yticklabels([])
     #my_axes.set_xticklabels([])
-    pl.title("PFPSMC heat map", fontsize=25)
+    pl.title("SMCSMC heat map", fontsize=25)
     pl.xlabel("Sequence base", fontsize=20)
     #pl.ylabel("TMRCA (generation)")
-    pl.ylabel("TMRCA (4N0)", fontsize=20)
+    pl.ylabel("TMRCA (4Ne)", fontsize=20)
     pl.savefig( prefix + "smcsmc_heat" + ".png", transparent=True)
     pl.close()
 
