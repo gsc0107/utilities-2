@@ -25,9 +25,7 @@ rm -r *_ErrFiles
 rm -r *_OutFiles
 rm Particle*.sh
 
-#if [ ! -d Particle1000Seqlen30000000 ]; then
 python movie.py ${suffix} ${scalingNe} ${model}
-#fi
 
 echo "
 \documentclass[12pt,landscape]{article}
@@ -101,4 +99,7 @@ From left to right, sequence lengths are $(echo ${actual_seqlen[*]} | tr ' ' ,)
 
 pdflatex ${figurefile}.tex
 
-R CMD BATCH run_time.r
+Rarg="--args ${#actual_seqlen[@]} ${actual_seqlen[@]} ${#actual_particles[@]} ${actual_particles[@]} ${suffix}"
+echo ${Rarg}
+rm run_time.r.Rout
+R --slave ${Rarg} < run_time.r > run_time.r.Rout
