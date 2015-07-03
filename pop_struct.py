@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 
 import sys
-
-sys.path.append("/home/szh41/oxford-svn/utility")
-sys.path.append("/Users/joezhu/oxford-svn/utility")
-sys.path.append("/home/joezhu/oxford-svn/utility")
-
 import pylab as pl
 import numpy as np
 import os
@@ -243,7 +238,15 @@ class ms_param_of_case :
             self.t                = 0.0013 * self.seqlen
             self.r                = 0.00013 * self.seqlen
             self.Time             = [0, 0.45, 0.79, 1.35]
-            self.pop              = [1, 1,  1, 1]        
+            self.pop              = [1, 1,  1, 1]
+        
+        elif self.case == "Null":
+            self.scaling_N0 = 10**4
+            self.seqlen           = 10**6
+            self.t                = 0.0013 * self.seqlen
+            self.r                = 0.00013 * self.seqlen
+            self.Time             = []
+            self.pop              = []        
 
         elif self.case == "Two":
             self.scaling_N0 = 10**4
@@ -415,7 +418,7 @@ class ms_param_of_case :
 
 
     
-    def simulate_command( self, nsam = 2, loci_length = 0, mutation_rate = 0, num_loci = 1, ith_run = 0):
+    def simulate_command( self, nsam = 2, loci_length = 0, mutation_rate = 0, num_loci = 1, ith_run = 0, additionalFlags = ""):
         """
         Generate ms command for simulation
         """
@@ -444,7 +447,7 @@ class ms_param_of_case :
                      `int(self.seqlen)`    + __space__ + \
                      "-T"                  + __space__                      
 
-        ms_command += "-p 10" + __space__
+        ms_command += "-p 10" + __space__ + additionalFlags + __space__
 
         if self.migration_cmd:
             ms_command += self.migration_cmd + __space__
@@ -462,7 +465,7 @@ class ms_param_of_case :
             
         if ( self.seqlen > 10**9 ):
             ms_command += "-l 300000" + __space__
-            
+
         ms_command += ">" + __space__ + self.ms_out_file_prefix         
         print ms_command        
         self.ms_command = ms_command
@@ -481,17 +484,17 @@ class ms_param_of_case :
     
     
     
-    def simulate( self, nsam = 2, loci_length = 0, mutation_rate = 0, num_loci = 1, ith_run = 0):
+    def simulate( self, nsam = 2, loci_length = 0, mutation_rate = 0, num_loci = 1, ith_run = 0, additionalFlags = ""):
         """
         Generate file names and prefix for future simulations
         Generate ms data
         """
-        self.simulate_command(nsam, loci_length, mutation_rate, num_loci, ith_run)
+        self.simulate_command(nsam, loci_length, mutation_rate, num_loci, ith_run, additionalFlags)
         os.system( self.ms_command)
         self.ms_sim_post_process(nsam)
-    
-    
-    
+
+
+
     def ms_sim_post_process(self, nsam):
         """
         Calling shell commands for some string manipulation for the ms output. 
@@ -562,20 +565,19 @@ if __name__ == "__main__":
     _param.fixed_seed = True
     _param.printing() 
     
-    _missing = False
     if len(sys.argv) > 4:
-        if sys.argv[4] == "missing":
-            _missing = True
-        else:            
-            _param.post_init_process_seqlen( sys.argv[4] )
-            
+        _param.post_init_process_seqlen( sys.argv[4] )
+    
+    _additionalFlags = ""
     if len(sys.argv) > 5:
+        _additionalFlags = sys.argv[5]
+
+    _missing = False
+    if len(sys.argv) > 6:
         if sys.argv[5] == "missing":
             _missing = True
-        else:            
-            _param.post_init_process_seqlen( sys.argv[4] )            
         
-    _param.simulate( _nsam, ith_run = _ith_run )
+    _param.simulate( _nsam, ith_run = _ith_run, additionalFlags = _additionalFlags )
     #seqlen_in, position_file_name_in, seg_file_name_in, segment_prefix_in
     ms.To_seg(`_param.seqlen`, _param.position_file, _param.seg_file, _param.ms_out_file_prefix, _missing )
     #ms.To_vcf(`_param.seqlen`, _param.position_file, _param.seg_file, _param.ms_out_file_prefix, "vcf")
