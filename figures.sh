@@ -4,6 +4,9 @@ rm -r Particle*particle*
 source figure_parameters.src
 
 source ../pipeline.sh
+logFILE="../simulation_runs/${currentjob}TASK1.log"
+smcsmcVersion=$(grep "smcsmc version" ${logFILE})
+scrmVersion=$(grep "scrm version" ${logFILE})
 
 actual_seqlen=()
 actual_mutrate=()
@@ -13,13 +16,14 @@ for seqlen_index in "${seqlen_index_array[@]}"; do
 	actual_mutrate+=(${theta_array[seqlen_index]})
 	actual_recombrate+=(${rho_array[seqlen_index]})
 done
-echo ${actual_seqlen[*]} > actual_seqlen_tmp
+#echo ${actual_seqlen[*]} > actual_seqlen_tmp
 
 actual_particles=()
 for particle_index in "${particle_index_array[@]}"; do
 	actual_particles+=(${particle_array[particle_index]})
 done
-echo ${actual_particles[*]} > actual_particles_tmp
+#echo ${actual_particles[*]} > actual_particles_tmp
+
 
 rm -r *_ErrFiles
 rm -r *_OutFiles
@@ -38,6 +42,9 @@ echo "
 \begin{document}
 
 {\LARGE \bf 
+~\\\\
+${smcsmcVersion} \\\\
+${scrmVersion} \\\\
 smcsmc Parameters: \\\\
 Data source: ${DATA} \\\\
 Time interval pattern: ${pattern_tmax} \\\\
