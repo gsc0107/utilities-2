@@ -11,18 +11,18 @@ scrmVersion=$(grep "scrm version" ${logFILE})
 actual_seqlen=()
 actual_mutrate=()
 actual_recombrate=()
-for seqlen_index in "${seqlen_index_array[@]}"; do        
+for seqlen_index in "${seqlen_index_array[@]}"; do
 	actual_seqlen+=(${seqlen_array[seqlen_index]})
 	actual_mutrate+=(${theta_array[seqlen_index]})
 	actual_recombrate+=(${rho_array[seqlen_index]})
 done
-#echo ${actual_seqlen[*]} > actual_seqlen_tmp
+echo ${actual_seqlen[*]} > actual_seqlen_tmp
 
 actual_particles=()
 for particle_index in "${particle_index_array[@]}"; do
 	actual_particles+=(${particle_array[particle_index]})
 done
-#echo ${actual_particles[*]} > actual_particles_tmp
+echo ${actual_particles[*]} > actual_particles_tmp
 
 
 rm -r *_ErrFiles
@@ -41,7 +41,7 @@ echo "
 %\newcommand{\Iteration}{16}
 \begin{document}
 
-{\LARGE \bf 
+{\LARGE \bf
 ~\\\\
 ${smcsmcVersion} \\\\
 ${scrmVersion} \\\\
