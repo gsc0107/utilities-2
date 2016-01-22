@@ -46,8 +46,8 @@ class ms_param_of_case :
         if mut_ratio == median, over write the mutation rate to 5 times more than the recombination rate
         if mut_ratio == equal, over write the mutation rate equal to the recombination rate
         """
-        #if mut_ratio == "":
-            #return 
+        if mut_ratio == "":
+            return 
         
         if   mut_ratio == "high":    self.t = self.r * 10
         elif mut_ratio == "median":  self.t = self.r * 5
@@ -76,6 +76,9 @@ class ms_param_of_case :
         self.case = case
         self.fixed_seed = False
         self.migration_cmd = None
+
+        self.exp_growth = False
+
         if self.case == "sim-0":
     #       -t 81960 -r 13560 30000000 -eN 0.01 0.05 -eN 0.0375 0.5 -eN 1.25 1
     # from the paper, mu is used 2.5e-8
@@ -322,6 +325,17 @@ class ms_param_of_case :
             self.Time             = [0]
             self.pop              = [1]
         
+        elif self.case == "zigzag":
+            self.scaling_N0       = 10**4
+            self.seqlen           = 10**7
+            self.t                = 7156        #check this
+            self.r                = 2000
+            self.Time             = [0,0.000582262,0.00232905,0.00931619,0.0372648,0.149059,0.596236]
+            self.pop              = [5,np.nan,np.nan,np.nan,np.nan,np.nan,.5]
+            self.alpha            = [np.nan,1318.18,-329.546,82.3865,-20.5966,5.14916,np.nan]
+            self.exp_growth       = True
+
+
         self.post_init_process_seqlen  ( seqlen = seqlen )
         self.post_init_process_mutrate ( mut_ratio = mut_ratio )
         #return 
@@ -456,12 +470,25 @@ class ms_param_of_case :
             #if (length(ms_param$Time)==1) {break;} # assume that at time zero, all the population structure have size N_0 = scaling_N0
             if type(self.pop[i]) == type(""):
                 ms_command += (self.pop[i] % self.Time[i]) + __space__
+            elif (self.exp_growth):
+                if ( not np.isnan(self.pop[i])):
+                    ms_command += "-eN" + __space__ + `self.Time[i]` + __space__ + `self.pop[i]` + __space__
+                elif ( not np.isnan(self.alpha[i])):
+                    ms_command += "-eG" + __space__ + `self.Time[i]` + __space__ + `self.alpha[i]` + __space__
+                else:
+                    os.system( "echo PROBLEM WITH EXPONENTIAL GROWTH: case has inconsistent pop and alpha arrays" ) # report problem with case
             else:
                 # common case
                 ms_command += "-eN" + __space__ + `self.Time[i]` + __space__ + `self.pop[i]` + __space__ 
     
+
         if self.fixed_seed: 
             ms_command += "-seed " + __space__ + `ith_run` + __space__ + `ith_run` + __space__ + `ith_run` + __space__
+            ## below causes a segmentation fault... strange
+            #if( self.exp_growth ):
+            #    ms_command += "-seed " + __space__ + `ith_run` + __space__ # want the seed to match with that in schiffels durbin paper
+            #else:
+            #    ms_command += "-seed " + __space__ + `ith_run` + __space__ + `ith_run` + __space__ + `ith_run` + __space__
             
         if ( self.seqlen > 10**9 ):
             ms_command += "-l 300000" + __space__
