@@ -14,7 +14,7 @@ __space__ = " "
 
 
 class ms_param_of_case :
-    
+
     def post_init_process_seqlen (self, seqlen = "" ):
         """
         if seqlen == long, over write the default the seqlen to 3 * 10**7
@@ -23,11 +23,11 @@ class ms_param_of_case :
         """
         if seqlen == "":
             return
-        
+
         # First undo the mutation rate and recombination rate.
         self.t = self.t / float(self.seqlen)
         self.r = self.r / float(self.seqlen)
-        
+
         if seqlen == "long":      self.seqlen = 3 * 10**7
         elif seqlen == "median":  self.seqlen =     10**6
         elif seqlen == "short":   self.seqlen = 5 * 10**5
@@ -37,9 +37,9 @@ class ms_param_of_case :
             self.seqlen = seqlen
         self.t = self.t * float(self.seqlen)
         self.r = self.r * float(self.seqlen)
-        
-        
-        
+
+
+
     def post_init_process_mutrate (self, mut_ratio = ""):
         """
         if mut_ratio == high, over write the mutation rate to 10 times more than the recombination rate
@@ -47,32 +47,32 @@ class ms_param_of_case :
         if mut_ratio == equal, over write the mutation rate equal to the recombination rate
         """
         if mut_ratio == "":
-            return 
-        
+            return
+
         if   mut_ratio == "high":    self.t = self.r * 10
         elif mut_ratio == "median":  self.t = self.r * 5
-        elif mut_ratio == "equal":   self.t = self.r 
-        
-    
+        elif mut_ratio == "equal":   self.t = self.r
+
+
     def __init__(self, case, nsam, seqlen = "", mut_ratio = ""):
-        """        
+        """
         define ms cases and parameters
         Note that 4N0 * mu = t/L
-        where N0 is the scaling population size, 
+        where N0 is the scaling population size,
               Time and topTime are scaled in 4N0 unit!
               mu is the mutation rate per base per individual
               L is the length of the sequence
               t is the mutation rate per locus per generation
-              
+
         if seqlen == long, over write the default the seqlen to 3 * 10**7
         elif seqlen == median, over wirte the default seqlen to 10**6
         elif seqlen == short, over write the default seqlen to 5 * 10**5
-      
+
         if mut_ratio == high, over write the mutation rate to 10 times more than the recombination rate
         if mut_ratio == median, over write the mutation rate to 5 times more than the recombination rate
         if mut_ratio == equal, over write the mutation rate equal to the recombination rate
-        
-        """           
+
+        """
         self.case = case
         self.fixed_seed = False
         self.migration_cmd = None
@@ -86,7 +86,7 @@ class ms_param_of_case :
             self.seqlen           = 3*10**7
             self.t                = 0.002732 * self.seqlen
             self.r                = self.seqlen * 0.000452
-            self.Time             = [.01, 0.0375, 1.25] 
+            self.Time             = [.01, 0.0375, 1.25]
             self.pop              = [0.05, 0.5, 1]
 
         elif self.case == "sim-1":
@@ -109,7 +109,7 @@ class ms_param_of_case :
             self.migration_cmd    = " -I 2 " + str(int(nsam/2)) + " " + str(int(nsam/2)) + " 0.0"
             self.Time             = [.01, 0.06, 0.2, 0.6, 1, 2]
             self.pop              = [0.1, 1, 0.5, "-ej %s 2 1", 1, 2]
-         
+
         elif self.case == "sim-2":
     #       -t 3000 -r 600 30000000 -eN 0.1 5 -eN 0.6 20 -eN 2 5 -eN 10 10 -eN 20 5
     # from the paper, mu is used 2.5e-8
@@ -119,7 +119,7 @@ class ms_param_of_case :
             self.r                = self.seqlen * 2e-5
             self.Time             = [0.1, 0.6, 2, 10, 20]
             self.pop              = [5,   20,  5, 10, 5]
-         
+
         elif self.case == "sim-3":
     #       -t 60000 -r 12000 30000000 -eN 0.01 0.05 -eN 0.0150 0.5 -eN 0.05 0.25 -eN 0.5 0.5
     # from the paper, mu is used 2.5e-8
@@ -129,17 +129,17 @@ class ms_param_of_case :
             self.r                = self.seqlen * 0.0004
             self.Time             = [0.01, 0.015, 0.05, 0.5]
             self.pop              = [0.05, 0.5, 0.25, 0.5]
-         
+
         elif self.case == "sim-1-modified":
 		# from the paper, mu is used 2.5e-8
     #       -t 30000 -r 6000 30000000 -T -eN 0.05 0.1 -eN 0.07 1 -eN 0.2 0.5 -eN 0.8 1 -eN 1.5 2
-            self.scaling_N0 = 10**4 
+            self.scaling_N0 = 10**4
             self.seqlen           = 3*10**7
             self.t                = self.seqlen * 0.001
             self.r                = self.seqlen * 0.0002
             self.Time             = [0.05, 0.07, 0.2, 0.8, 1.5]
             self.pop              = [0.1, 1, 0.5, 1, 2]
-         
+
         elif self.case == "sim-YH":
     #      -t 65130.39 -r 10973.82 30000000 -eN 0.0055 0.0832 -eN 0.0089 0.0489 \
     #-eN 0.0130 0.0607 -eN 0.0177 0.1072 -eN 0.0233 0.2093 -eN 0.0299 0.3630 \
@@ -158,23 +158,23 @@ class ms_param_of_case :
             self.r                = 0.000365794 * self.seqlen
             self.Time             = [0.0055, 0.0089, 0.0130, 0.0177, 0.0233, 0.0299, 0.0375, 0.0465, 0.0571, 0.0695, 0.0840, 0.1010, 0.1210, 0.1444, 0.1718, 0.2040, 0.2418, 0.2860, 0.3379, 0.3988, 0.4701, 0.5538, 0.6520, 0.7671, 0.9020, 1.0603, 1.4635]
             self.pop              = [0.0832, 0.0489, 0.0607, 0.1072, 0.2093, 0.3630, 0.5041, 0.5870, 0.6343, 0.6138, 0.5292, 0.4409, 0.3749, 0.3313, 0.3066, 0.2952, 0.2915, 0.2950, 0.3103, 0.3458, 0.4109, 0.5048, 0.5996, 0.6440, 0.6178, 0.5345, 1.7931]
-         
+
         elif self.case == "diCal-S1":
             self.scaling_N0 = 10**4
             self.seqlen           = 10**6
             self.t                = self.seqlen * 0.01
             self.r                = self.seqlen * 0.01
             self.Time             = [0.05, 0.2, 0.5]
-            self.pop              = [0.1, 0.5, 1.25]        
-    
+            self.pop              = [0.1, 0.5, 1.25]
+
         elif self.case == "diCal-S2":
             self.scaling_N0 = 10**4
             self.seqlen           = 10**6
             self.t                = self.seqlen * 0.01
             self.r                = self.seqlen * 0.01
             self.Time             = [0, 0.05, 0.2, 0.5]
-            self.pop              = [10, 0.1, 0.5, 1.25]         
-        
+            self.pop              = [10, 0.1, 0.5, 1.25]
+
         elif self.case == "test-1-original":
             self.scaling_N0 = 10**4
     #        self.seqlen           = 5*10**6
@@ -182,24 +182,24 @@ class ms_param_of_case :
             self.t                = self.seqlen * 0.005
             self.r                = self.seqlen * 0.0005
             self.Time             = [0, 0.45, 0.5]
-            self.pop              = [1, 0.1, 1]        
-    
+            self.pop              = [1, 0.1, 1]
+
         elif self.case == "test-1":
             self.scaling_N0 = 10**4
             self.seqlen           = 5 * 10**6
             self.t                = self.seqlen * 0.005
             self.r                = self.seqlen * 0.0005
             self.Time             = [0, 0.45, 0.5]
-            self.pop              = [1, 0.1, 1]    
-         
+            self.pop              = [1, 0.1, 1]
+
         elif self.case == "dummy":
             self.scaling_N0 = 10**4
             self.t                = 1000
             self.seqlen           = 1000000
             self.r                = 600
             self.Time             = [0, .01, 0.06, 0.2, 1, 2]
-            self.pop              = [0.25, 0.1, 1, 0.5, 1, 2] 
-         
+            self.pop              = [0.25, 0.1, 1, 0.5, 1, 2]
+
         elif self.case == "dummy0":
             self.scaling_N0 = 10**4
             self.t                = 10
@@ -207,7 +207,7 @@ class ms_param_of_case :
             self.r                = 6
             self.Time             = [0, .01, 0.06, 0.2, 1, 2]
             self.pop              = [1, 0.25, 0.25, 0.25, 0.25, 0.25]
-         
+
         elif self.case == "dummy1":
     #       -t 60000 -r 12000 30000000 -eN 0.01 0.05 -eN 0.0150 0.5 -eN 0.05 0.25 -eN 0.5 0.5
             self.scaling_N0 = 10**4
@@ -216,25 +216,25 @@ class ms_param_of_case :
             self.seqlen           = 1000000
             self.Time             = [0, 0.01, 0.015, 0.05, 0.5]
             self.pop              = [1, 0.05, 0.5, 0.25, 0.5]
-         
+
         elif self.case == "open":
     #       -t 60000 -r 12000 30000000 -eN 0.01 0.05 -eN 0.0150 0.5 -eN 0.05 0.25 -eN 0.5 0.5
             self.scaling_N0 = 10**4
             self.seqlen           = 10**6
             self.t                = .0100 * self.seqlen
-            self.r                = 0.006 * self.seqlen           
+            self.r                = 0.006 * self.seqlen
             self.Time             = [0, 0.5, 1]
             self.pop              = [1, 0.5, 0.25]
-         
+
         elif self.case == "close":
     #       -t 60000 -r 12000 30000000 -eN 0.01 0.05 -eN 0.0150 0.5 -eN 0.05 0.25 -eN 0.5 0.5
             self.scaling_N0 = 10**4
             self.seqlen           = 10**6
             self.t                = .0100 * self.seqlen
-            self.r                = 0.006 * self.seqlen  
+            self.r                = 0.006 * self.seqlen
             self.Time             = [0, 0.5, 1]
             self.pop              = [1, 2, 3]
-         
+
         elif self.case == "One":
             self.scaling_N0 = 10**4
             self.seqlen           = 10**6
@@ -242,14 +242,14 @@ class ms_param_of_case :
             self.r                = 0.00013 * self.seqlen
             self.Time             = [0, 0.45, 0.79, 1.35]
             self.pop              = [1, 1,  1, 1]
-        
+
         elif self.case == "Null":
             self.scaling_N0 = 10**4
             self.seqlen           = 10**6
             self.t                = 0.0013 * self.seqlen
             self.r                = 0.00013 * self.seqlen
             self.Time             = []
-            self.pop              = []        
+            self.pop              = []
 
         elif self.case == "Two":
             self.scaling_N0 = 10**4
@@ -257,7 +257,7 @@ class ms_param_of_case :
             self.t                = 0.0013 * self.seqlen
             self.r                = 0.00013 * self.seqlen
             self.Time             = [0, 0.45, 0.79, 1.35]
-            self.pop              = [2, 2,  2, 2]        
+            self.pop              = [2, 2,  2, 2]
 
         elif self.case == "Half":
             self.scaling_N0 = 10**4
@@ -265,9 +265,9 @@ class ms_param_of_case :
             self.t                = 0.0013 * self.seqlen
             self.r                = 0.00013 * self.seqlen
             self.Time             = [0, 0.45, 0.79, 1.35]
-            self.pop              = [.5, .5,  .5, .5]        
+            self.pop              = [.5, .5,  .5, .5]
 
-        
+
         elif self.case == "Heat":
             self.scaling_N0 = 10**4
             self.seqlen           = 2 * 10**5
@@ -275,7 +275,7 @@ class ms_param_of_case :
             self.r                = 0.00015 * self.seqlen
             self.Time             = [0]
             self.pop              = [1]
-         
+
         elif self.case == "Heat2":
             self.scaling_N0 = 2 * 10**4
             self.seqlen           = 2 * 10**5
@@ -284,7 +284,7 @@ class ms_param_of_case :
             self.Time             = [0]
             self.pop              = [1]
 
-        
+
         elif self.case == "old":
             self.scaling_N0 = 10**4
             self.t                = 1000
@@ -292,31 +292,31 @@ class ms_param_of_case :
             self.seqlen           = 10000
             self.Time             = [0, 8, 10, 15]
             self.pop              = [1, 1.5, .5, 1]
-         
+
         elif self.case == "wakeley_a":
             self.scaling_N0 = 10**4
             self.seqlen           = 10**6
             self.t                = .0100 * self.seqlen
-            self.r                = 0.006 * self.seqlen  
+            self.r                = 0.006 * self.seqlen
             self.Time             = [0, 4]
             self.pop              = [1, .25]
-         
+
         elif self.case == "wakeley_b":
             self.scaling_N0 = 10**4
             self.seqlen           = 10**6
             self.t                = .0100 * self.seqlen
-            self.r                = 0.006 * self.seqlen  
+            self.r                = 0.006 * self.seqlen
             self.Time             = [0, 4]
             self.pop              = [1, 4]
-        
+
         elif self.case == "recomb_test1":
             self.scaling_N0 = 10**4
             self.seqlen           = 10**6
             self.t                = 0.0009 * self.seqlen
             self.r                = 0.00015 * self.seqlen
             self.Time             = [0]
-            self.pop              = [1]        
-    
+            self.pop              = [1]
+
         elif self.case == "recomb_test2":
             self.scaling_N0 = 10**4
             self.seqlen           = 10**7
@@ -324,7 +324,7 @@ class ms_param_of_case :
             self.r                = 0.00013 * self.seqlen
             self.Time             = [0]
             self.pop              = [1]
-        
+
         elif self.case == "zigzag":
             self.scaling_N0       = 10**4
             self.seqlen           = 10**7
@@ -335,12 +335,103 @@ class ms_param_of_case :
             self.alpha            = [np.nan,1318.18,-329.546,82.3865,-20.5966,5.14916,np.nan]
             self.exp_growth       = True
 
+        elif self.case == "zigzag14k":
+            self.scaling_N0       = 1.4*10**4
+            self.seqlen           = 10**7
+            self.t                = 7156        #check this
+            self.r                = 2000
+            self.Time             = [0,0.000582262,0.00232905,0.00931619,0.0372648,0.149059,0.596236]
+            self.pop              = [5,np.nan,np.nan,np.nan,np.nan,np.nan,.5]
+            self.alpha            = [np.nan,1318.18,-329.546,82.3865,-20.5966,5.14916,np.nan]
+            self.exp_growth       = True
+
+        elif self.case == "constant_migration":
+            self.scaling_N0       = 10**4
+            self.seqlen           = 10**7
+            self.t                = 0.001 * self.seqlen
+            self.r                = 0.0002 * self.seqlen
+            self.Time             = [0, 0.45, 0.79, 1.35]
+            self.pop              = [1, 1,  1, 1]
+            self.migration_cmd    = " -I 2 " + str(int(nsam/2)) + " " + str(int(nsam/2)) + " 1.0"
+
+        elif self.case == "unidirectional_constant_migration":
+            self.scaling_N0       = 10**4
+            self.seqlen           = 10**7
+            self.t                = 0.001 * self.seqlen
+            self.r                = 0.0002 * self.seqlen
+            self.Time             = [0, 0.45, 0.79, 1.35]
+            self.pop              = [1, 1,  1, 1]
+            self.migration_cmd    = " -I 2 " + str(int(nsam/2)) + " " + str(int(nsam/2)) + " -m 1 2 2.0"
+
+        elif self.case == "split":
+            # want to call "ms 4 10000000 -t 10000 -r 4000 -I 2 2 2 -ej 0.116 2 1 -T"
+            # from Shiffels, Durbin msmc paper
+            # actually "ms 4 1 -t 10000 -r 4000 10000000 -I 2 2 2 -ej 0.116 2 1 -T"
+            self.scaling_N0       = 10**4
+            self.seqlen           = 10**7
+            self.t                = .001 * self.seqlen
+            self.r                = .0004 * self.seqlen
+            self.Time             = []
+            self.pop              = []
+            self.migration_cmd    = " -I 2 " + str(int(nsam/2)) + " " + str(int(nsam/2)) + " -ej 0.116 2 1"
+
+        elif self.case == "split_1.6":
+            self.scaling_N0       = 10**4
+            self.seqlen           = 10**7
+            self.t                = .001 * self.seqlen
+            self.r                = .0004 * self.seqlen
+            self.Time             = []
+            self.pop              = []
+            self.migration_cmd    = " -I 2 " + str(int(nsam/2)) + " " + str(int(nsam/2)) + " -ej 1.6 2 1"
+
+        elif self.case == "split_0.8":
+            self.scaling_N0       = 10**4
+            self.seqlen           = 10**7
+            self.t                = .001 * self.seqlen
+            self.r                = .0004 * self.seqlen
+            self.Time             = []
+            self.pop              = []
+            self.migration_cmd    = " -I 2 " + str(int(nsam/2)) + " " + str(int(nsam/2)) + " -ej 0.8 2 1"
+
+        elif self.case == "split_0.4":
+            self.scaling_N0       = 10**4
+            self.seqlen           = 10**7
+            self.t                = .001 * self.seqlen
+            self.r                = .0004 * self.seqlen
+            self.Time             = []
+            self.pop              = []
+            self.migration_cmd    = " -I 2 " + str(int(nsam/2)) + " " + str(int(nsam/2)) + " -ej 0.4 2 1"
+
+
+        elif self.case == "split_with_migration":
+            # want to call "ms 4 10000000 -t 10000 -r 4000 -I 2 2 2 -ej 0.116 2 1 -eM 0.058 16 -T"
+	    # from Shiffels, Durbin msmc paper
+            # actually "ms 4 1 -t 10000 -r 4000 10000000 -I 2 2 2 -ej 0.116 2 1 -eM 0.058 16 -T"
+            self.scaling_N0       = 10**4
+            self.seqlen           = 10**7
+	    self.t                = .001 * self.seqlen
+            self.r                = .0004 * self.seqlen
+            self.Time             = []
+            self.pop              = []
+            self.migration_cmd    = " -I 2 " + str(int(nsam/2)) + " " + str(int(nsam/2)) + " -ej 0.116 2 1 -eM 0.058 16"
+
+        elif self.case == "split_with_migration_check":
+            # want to call "ms 4 10000000 -t 10000 -r 4000 -I 2 2 2 -ej 0.116 2 1 -eM 0.058 16 -T"
+            # from Shiffels, Durbin msmc paper
+            # actually "ms 4 1 -t 10000 -r 4000 10000000 -I 2 2 2 -ej 0.116 2 1 -eM 0.058 16 -T"
+            self.scaling_N0       = 10**4
+            self.seqlen           = 10**7
+            self.t                = .001 * self.seqlen
+            self.r                = .0004 * self.seqlen
+            self.Time             = []
+            self.pop              = []
+            self.migration_cmd    = " -I 2 " + str(int(nsam/2)) + " " + str(int(nsam/2)) + " -ej 0.116 2 1 -eM 0 0 -eM 0.058 16"
 
         self.post_init_process_seqlen  ( seqlen = seqlen )
         self.post_init_process_mutrate ( mut_ratio = mut_ratio )
-        #return 
+        #return
 
-             
+
     def printing(self):
         """
         Print members of Class ms_param_of_case
@@ -364,46 +455,46 @@ class ms_param_of_case :
             if type(pop[i]) == type(""):
                 # ignore migration commands, and replace by (unchanged) pop size
                 pop[i] = pop[i-1]
-        
+
         if time[0] != 0 :
             time.insert(0, float(0))
             pop.insert(0, float(1))
-        
+
         if timescale == "years":
             time = [ti * 4 * self.scaling_N0 * year for ti in time ]
-            pl.xlabel("Time (years, "+`year`+" years per generation)",  fontsize=20)    
-            #pl.xlabel("Years")    
+            pl.xlabel("Time (years, "+`year`+" years per generation)",  fontsize=20)
+            #pl.xlabel("Years")
         elif timescale == "generation":
             time = [ti * 4 * self.scaling_N0 for ti in time ]
-            pl.xlabel("Generations)")    
+            pl.xlabel("Generations)")
         elif timescale == "4N0":
             time = [ti*1 for ti in time ]
-            pl.xlabel("Time (4N generations)")    
+            pl.xlabel("Time (4N generations)")
         elif timescale == "2N0":
             time = [ti*2 for ti in time ]
-            pl.xlabel("Time (2N generations)")       
+            pl.xlabel("Time (2N generations)")
         else:
             print "timescale must be one of \"4N0\", \"generation\", or \"years\""
             return
-        
+
         time[0] = time[1] / float(20)
-        
+
         time.append(time[-1] * 2)
         yaxis_scaler = 10000
-        
+
         pop = [popi * self.scaling_N0 / float(yaxis_scaler) for popi in pop ]
-        pop.insert(0, pop[0])               
-        pl.xscale ('log', basex = 10)        
+        pop.insert(0, pop[0])
+        pl.xscale ('log', basex = 10)
         #pl.xlim(min(time), max(time))
         pl.xlim(1e3, 1e7)
-        
+
         if ylog10scale:
             pl.ylim(0.06, 10000)
-            pl.yscale ('log', basey = 10)            
+            pl.yscale ('log', basey = 10)
         else:
             pl.ylim(0, max(pop)+2)
-        
-        pl.ylim(0,5)            
+
+        pl.ylim(0,5)
         pl.tick_params(labelsize=20)
 
         #pl.step(time, pop , color = "blue", linewidth=5.0)
@@ -413,7 +504,7 @@ class ms_param_of_case :
         #pl.title ( self.case + " population structure" )
         #pl.ylabel("Pop size ($*$ "+`yaxis_scaler` +")")
         pl.ylabel("Effective population size",fontsize=20 )
-    
+
     def sim_file_names(self, nsam = 2, ith_run = 0):
         """
         Create file names for ms simulations
@@ -422,8 +513,8 @@ class ms_param_of_case :
                              "Samples" +`nsam` + \
                              "msdata"
 
-        self.ms_out_file_prefix += `ith_run`         
-        print self.ms_out_file_prefix        
+        self.ms_out_file_prefix += `ith_run`
+        print self.ms_out_file_prefix
         self.position_file = self.ms_out_file_prefix + "position"
         self.seg_file      = self.ms_out_file_prefix + "seg"
         self.tree_file     = self.ms_out_file_prefix + "msTrees"
@@ -431,23 +522,23 @@ class ms_param_of_case :
         self.mschange_file = self.ms_out_file_prefix + "mschange"
 
 
-    
+
     def simulate_command( self, nsam = 2, loci_length = 0, mutation_rate = 0, num_loci = 1, ith_run = 0, additionalFlags = ""):
         """
         Generate ms command for simulation
         """
         self.sim_file_names(nsam, ith_run)
-        
+
         if loci_length != 0:
             self.t /= self.seqlen * loci_length
             self.seqlen = loci_length
-        
+
         if mutation_rate == 0:
             mutation_rate = self.t
         else:
-            mutation_rate *= self.seqlen        
-        
-        method = "ms"        
+            mutation_rate *= self.seqlen
+
+        method = "ms"
         if ( self.seqlen > 10**9 ):
             method = "scrm"
         # build ms command line for parameters, and execute
@@ -459,7 +550,7 @@ class ms_param_of_case :
                      "-r"                  + __space__ + \
                      `int(self.r)`         + __space__ + \
                      `int(self.seqlen)`    + __space__ + \
-                     "-T"                  + __space__                      
+                     "-T"                  + __space__
 
         ms_command += "-p 10" + __space__ + additionalFlags + __space__
 
@@ -479,24 +570,24 @@ class ms_param_of_case :
                     os.system( "echo PROBLEM WITH EXPONENTIAL GROWTH: case has inconsistent pop and alpha arrays" ) # report problem with case
             else:
                 # common case
-                ms_command += "-eN" + __space__ + `self.Time[i]` + __space__ + `self.pop[i]` + __space__ 
-    
+                ms_command += "-eN" + __space__ + `self.Time[i]` + __space__ + `self.pop[i]` + __space__
 
-        if self.fixed_seed: 
+
+        if self.fixed_seed:
             ms_command += "-seed " + __space__ + `ith_run` + __space__ + `ith_run` + __space__ + `ith_run` + __space__
             ## below causes a segmentation fault... strange
             #if( self.exp_growth ):
             #    ms_command += "-seed " + __space__ + `ith_run` + __space__ # want the seed to match with that in schiffels durbin paper
             #else:
             #    ms_command += "-seed " + __space__ + `ith_run` + __space__ + `ith_run` + __space__ + `ith_run` + __space__
-            
+
         if ( self.seqlen > 10**9 ):
             ms_command += "-l 300000" + __space__
 
-        ms_command += ">" + __space__ + self.ms_out_file_prefix         
-        print ms_command        
+        ms_command += ">" + __space__ + self.ms_out_file_prefix
+        print ms_command
         self.ms_command = ms_command
-        
+
     def ms_seed(self, python_seed):
         """
         Args: python_seed
@@ -508,9 +599,9 @@ class ms_param_of_case :
             np.random.seed( python_seed )
             seeds = np.random.random_integers(0, 1000, 3)
             return `seeds[0]` + " " + `seeds[1]` + " " + `seeds[2]+10`
-    
-    
-    
+
+
+
     def simulate( self, nsam = 2, loci_length = 0, mutation_rate = 0, num_loci = 1, ith_run = 0, additionalFlags = ""):
         """
         Generate file names and prefix for future simulations
@@ -524,22 +615,22 @@ class ms_param_of_case :
 
     def ms_sim_post_process(self, nsam):
         """
-        Calling shell commands for some string manipulation for the ms output. 
+        Calling shell commands for some string manipulation for the ms output.
         Extract
             The postion where mutation occurs
             Segregating site data
             Genealogies
             TMRCA of the genealogies
-            Number of basepairs that shared the same genealogy 
+            Number of basepairs that shared the same genealogy
         """
-        grep_position   = "grep \'positions\' " + self.ms_out_file_prefix + " | sed -e \'s/positions: //\' > " + self.position_file 
+        grep_position   = "grep \'positions\' " + self.ms_out_file_prefix + " | sed -e \'s/positions: //\' > " + self.position_file
         #print grep_position
-        grep_seg        = "tail" + __space__ + "-"+`nsam` + __space__ + self.ms_out_file_prefix + " > " + self.seg_file 
+        grep_seg        = "tail" + __space__ + "-"+`nsam` + __space__ + self.ms_out_file_prefix + " > " + self.seg_file
         #print grep_seg
-        grep_tree       = "grep \';\' " + self.ms_out_file_prefix + " | sed -e 's/\\[.*\\]//g' > " + self.tree_file     
+        grep_tree       = "grep \';\' " + self.ms_out_file_prefix + " | sed -e 's/\\[.*\\]//g' > " + self.tree_file
         grep_tmrca      = "hybrid-Lambda -gt " + self.tree_file + " -tmrca -o " + self.ms_out_file_prefix
         grep_changeat   = "grep \';\' " + self.ms_out_file_prefix + " | sed -e 's/\\[//g' | sed -e 's/\\].*;//g' > " + self.mschange_file
-    
+
         os.system( grep_position   )
         os.system( grep_seg        )
         os.system( grep_tree       )
@@ -554,9 +645,9 @@ class ms_param_of_case :
             topTime are scaled in 2N0 unit!
         """
         return self.topTime() * 2
-    
-    
-    
+
+
+
     def topTime(self):
         """
         Returns:
@@ -566,35 +657,35 @@ class ms_param_of_case :
         #return int( round(time + 0.5) ) # round up
         #time = self.Time[-1]*5 if len(self.Time)>1 else 2 # In case top time is zero
         time = self.Time[-1] if len(self.Time)>1 else 2 # Set the top time to the maximal value defined by the pop structure. To see what result this returns for smcsmc.
-        return time # round up    
-    
-    
+        return time # round up
+
+
     def function_call(self, command):
         """
         Record the function calling command into file *.call
-        
+
         Args:
-            command: Function calling string.        
+            command: Function calling string.
         """
         command_file = open(self.ms_out_file_prefix + ".call" , 'w')
         command_file.write(self.ms_command +'\n')
         command_file.write(command + '\n')
         command_file.close()
-        
+
 if __name__ == "__main__":
     #try:
     _case = sys.argv[1]
     _nsam = int(sys.argv[2])
     _ith_run = int(sys.argv[3])
-    
+
     #print _case, _nsam, _ith_run
     _param = ms_param_of_case( _case, _nsam )
     _param.fixed_seed = True
-    _param.printing() 
-    
+    _param.printing()
+
     if len(sys.argv) > 4:
         _param.post_init_process_seqlen( sys.argv[4] )
-    
+
     _additionalFlags = ""
     if len(sys.argv) > 5:
         _additionalFlags = sys.argv[5]
@@ -603,7 +694,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 6:
         if sys.argv[5] == "missing":
             _missing = True
-        
+
     _param.simulate( _nsam, ith_run = _ith_run, additionalFlags = _additionalFlags )
     #seqlen_in, position_file_name_in, seg_file_name_in, segment_prefix_in
     ms.To_seg(`_param.seqlen`, _param.position_file, _param.seg_file, _param.ms_out_file_prefix, _missing )
