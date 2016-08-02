@@ -415,17 +415,17 @@ class ms_param_of_case :
             self.pop              = []
             self.migration_cmd    = " -I 2 " + str(int(nsam/2)) + " " + str(int(nsam/2)) + " -ej 0.116 2 1 -eM 0.058 16"
 
-        elif self.case == "split_with_migration_check":
-            # want to call "ms 4 10000000 -t 10000 -r 4000 -I 2 2 2 -ej 0.116 2 1 -eM 0.058 16 -T"
+        elif self.case == "split_with_migration_gap":
+            # want to call "ms 4 10000000 -t 10000 -r 4000 -I 2 2 2 -ej 0.4 2 1 -eM 0.058 16 -eM 0.116 0 -T"
             # from Shiffels, Durbin msmc paper
-            # actually "ms 4 1 -t 10000 -r 4000 10000000 -I 2 2 2 -ej 0.116 2 1 -eM 0.058 16 -T"
+            # actually "ms 4 1 -t 10000 -r 4000 10000000 -I 2 2 2 -ej 0.4 2 1 -eM 0.058 16 -eM 0.116 0 -T"
             self.scaling_N0       = 10**4
             self.seqlen           = 10**7
             self.t                = .001 * self.seqlen
             self.r                = .0004 * self.seqlen
             self.Time             = []
             self.pop              = []
-            self.migration_cmd    = " -I 2 " + str(int(nsam/2)) + " " + str(int(nsam/2)) + " -ej 0.116 2 1 -eM 0 0 -eM 0.058 16"
+            self.migration_cmd    = " -I 2 " + str(int(nsam/2)) + " " + str(int(nsam/2)) + " -ej 0.4 2 1 -eM 0.058 16 -eM 0.116 0"
 
         elif self.case == "ancient_model_1":
             self.scaling_N0       = 10**4
