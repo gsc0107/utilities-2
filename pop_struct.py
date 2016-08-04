@@ -469,6 +469,20 @@ class ms_param_of_case :
             # need "-ej 0.506 1 2 -em 0 1 2 .17 -eM .106 0 -en 0 1 .4 -en .056 1 .1 -en .066 1 1 -en .156 1 2.7 -en .506 1 1.8 -en 0 2 1.5 -en .056 2 .3 -en .356 2 .6"
             # I am not sure about multiple pops in current functions, so just combining pop size instructions with migr command
 
+        elif self.case == "ancient_model_4":  # This is ancient_model_3, but with two waves of migration instead of one
+            self.scaling_N0       = 10**4
+            self.seqlen           = 10**7
+            self.t                = .001 * self.seqlen
+            self.r                = .0004 * self.seqlen
+            #self.Time             = [.02,.056,.066,.106,.156,.356,.506,]
+            #self.pop1             = [.4,.4,.1,1,1,2.7,2.7,1.8]
+            #self.pop2             = [1.5,1.5,.3,.3,.3,.3,.6,Na]
+            self.Time             = []
+            self.pop              = []
+            self.migration_cmd    = " -I 2 " + str(int(nsam/2)) + " " + str(int(nsam/2)) + " -ej 0.506 1 2 -em 0 1 2 .17 -eM .02 0 -em .056 1 2 .17 -eM .106 0" + " -en 0 1 .4 -en .056 1 .1 -en .066 1 1 -en .156 1 2.7 -en .506 1 1.8 -en 0 2 1.5 -en .056 2 .3 -en .356 2 .6"
+            # need "-ej 0.506 1 2 -em 0 1 2 .17 -eM .106 0 -en 0 1 .4 -en .056 1 .1 -en .066 1 1 -en .156 1 2.7 -en .506 1 1.8 -en 0 2 1.5 -en .056 2 .3 -en .356 2 .6"
+            # I am not sure about multiple pops in current functions, so just combining pop size instructions with migr command
+
         self.post_init_process_seqlen  ( seqlen = seqlen )
         self.post_init_process_mutrate ( mut_ratio = mut_ratio )
         #return
